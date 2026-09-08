@@ -17,7 +17,8 @@ mkdir -p "$WORK/hermes"
 cp -a "$WORK/rootfs/ubuntu-aarch64/opt/hermes-agent" "$WORK/hermes/agent"
 cp -a "$WORK/rootfs/ubuntu-aarch64/opt/hermes-webui" "$WORK/hermes/webui"
 cp -a "$WORK/rootfs/ubuntu-aarch64/opt/hermes-python" "$WORK/hermes/python"
-cp "$ROOT/tools/hermes_runtime/requirements-aarch64.lock" "$WORK/requirements-aarch64.lock"
+cp "$WORK/rootfs/ubuntu-aarch64/opt/hermes-python/requirements-aarch64.lock" \
+  "$WORK/requirements-aarch64.lock"
 cp "$ROOT/tools/hermes_runtime/LICENSES.txt" "$WORK/LICENSES.txt"
 
 HERMES_AGENT_REVISION="${HERMES_AGENT_REVISION:?HERMES_AGENT_REVISION is required}"
