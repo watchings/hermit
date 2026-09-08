@@ -1049,7 +1049,7 @@
     <string name="copy_path">Copiază calea</string>
     <string name="path_copied_to_clipboard">Calea a fost copiată în clipboard</string>
     <string name="open_file_manager">Deschideți managerul de fișiere</string>
-    <string name="navigate_to_external_files">Vă rugăm să accesațiAndroid/data/com.ai.assistance.operit/files/packagesCuprins</string>
+    <string name="navigate_to_external_files">Vă rugăm să accesațiAndroid/data/com.hermit/files/packagesCuprins</string>
     <string name="package_js_only">Se acceptă doar JavaScript(.js) și ToolPkg(.toolpkg) Document</string>
     <string name="package_script_only">Se acceptă doar HJSON(.hjson),JavaScript(.js) și TypeScript(.ts) Document</string>
     <string name="plugin_toolpkg_only">Se acceptă doar ToolPkg(.toolpkg) Document</string>

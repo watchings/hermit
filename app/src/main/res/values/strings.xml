@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Operit AI</string>
+    <string name="app_name">Hermit</string>
     <string name="accessibility_service_description">用于获取UI层次结构，为AI助手提供更快速的界面分析能力，不会收集或存储任何个人信息。</string>
     
     <!-- 模型选择器相关 -->
@@ -1070,7 +1070,7 @@
     <string name="copy_path">复制路径</string>
     <string name="path_copied_to_clipboard">路径已复制到剪贴板</string>
     <string name="open_file_manager">打开文件管理器</string>
-    <string name="navigate_to_external_files">请导航到Android/data/com.ai.assistance.operit/files/packages目录</string>
+    <string name="navigate_to_external_files">请导航到Android/data/com.hermit/files/packages目录</string>
     <string name="package_js_only">仅支持 JavaScript(.js) 和 ToolPkg(.toolpkg) 文件</string>
     <string name="package_script_only">仅支持 HJSON(.hjson)、JavaScript(.js) 和 TypeScript(.ts) 文件</string>
     <string name="plugin_toolpkg_only">仅支持 ToolPkg(.toolpkg) 文件</string>

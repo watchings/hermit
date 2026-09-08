@@ -17,7 +17,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Operit"
+rootProject.name = "Hermit"
 include(":app")
 include(":dragonbones")
 project(":dragonbones").projectDir = file("avator/dragonbones")

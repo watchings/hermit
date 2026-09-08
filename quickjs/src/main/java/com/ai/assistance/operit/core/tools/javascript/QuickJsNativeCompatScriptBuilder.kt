@@ -1,4 +1,4 @@
-package com.ai.assistance.operit.core.tools.javascript
+package com.hermit.core.tools.javascript
 
 internal fun buildQuickJsCompatScript(): String =
     """

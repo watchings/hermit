@@ -29,11 +29,11 @@
 -keep class com.ai.assistance.shower.IShowerVideoSink { *; }
 
 # 保留自定义的 UserService 类及 AIDL 接口
--keep class com.ai.assistance.operit.core.tools.system.shizuku.OperitShizukuShellUserService { *; }
--keep class com.ai.assistance.operit.core.tools.system.shizuku.IOperitShizukuShellService { *; }
--keep interface com.ai.assistance.operit.core.tools.system.shizuku.IOperitShizukuShellService { *; }
--keep class com.ai.assistance.operit.core.tools.system.shizuku.IOperitShizukuShellCallback { *; }
--keep interface com.ai.assistance.operit.core.tools.system.shizuku.IOperitShizukuShellCallback { *; }
+-keep class com.hermit.core.tools.system.shizuku.OperitShizukuShellUserService { *; }
+-keep class com.hermit.core.tools.system.shizuku.IOperitShizukuShellService { *; }
+-keep interface com.hermit.core.tools.system.shizuku.IOperitShizukuShellService { *; }
+-keep class com.hermit.core.tools.system.shizuku.IOperitShizukuShellCallback { *; }
+-keep interface com.hermit.core.tools.system.shizuku.IOperitShizukuShellCallback { *; }
 -keep class com.lyneon.cytoidinfoquerier.service.FileService { *; }
 -keep class com.lyneon.cytoidinfoquerier.IFileService { *; }
 -keep interface com.lyneon.cytoidinfoquerier.IFileService { *; }
@@ -44,7 +44,7 @@
 }
 
 # 保留 QuickJS 反射绑定对象
--keep class com.ai.assistance.operit.core.tools.javascript.JsEngine$JsToolCallInterface { *; }
+-keep class com.hermit.core.tools.javascript.JsEngine$JsToolCallInterface { *; }
 
 # Rules to suppress R8 warnings about missing classes
 # SVG Support
