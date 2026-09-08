@@ -13,19 +13,21 @@ mkdir -p "$WORK" "$OUTPUT/usr/var/lib/proot-distro/installed-rootfs/ubuntu"
 docker pull --platform=linux/arm64 "$PYTHON_IMAGE"
 docker pull --platform=linux/arm64 "$WEBUI_IMAGE"
 
-container_id="$(docker run --detach --platform=linux/arm64 \
-  --entrypoint /bin/bash "$WEBUI_IMAGE" -lc \
+python_container_id="$(docker run --detach --platform=linux/arm64 \
+  --entrypoint /bin/bash "$PYTHON_IMAGE" -lc \
   'apt-get update && apt-get install --no-install-recommends -y proot && rm -rf /var/lib/apt/lists/* && sleep infinity')"
-trap 'docker rm --force "$container_id" >/dev/null' EXIT
+webui_container_id="$(docker create --platform=linux/arm64 "$WEBUI_IMAGE")"
+trap 'docker rm --force "$python_container_id" "$webui_container_id" >/dev/null' EXIT
 
-docker export "$container_id" | tar -x -C "$OUTPUT/usr/var/lib/proot-distro/installed-rootfs/ubuntu"
+docker export "$python_container_id" | tar -x -C "$OUTPUT/usr/var/lib/proot-distro/installed-rootfs/ubuntu"
 install -Dm755 \
   "$OUTPUT/usr/var/lib/proot-distro/installed-rootfs/ubuntu/usr/bin/proot" \
   "$OUTPUT/usr/bin/proot"
 
 mkdir -p "$OUTPUT/hermes"
-cp -a "$OUTPUT/usr/var/lib/proot-distro/installed-rootfs/ubuntu/apptoo" \
-  "$OUTPUT/hermes/webui"
+mkdir -p "$WORK/webui"
+docker export "$webui_container_id" | tar -x -C "$WORK/webui"
+cp -a "$WORK/webui/apptoo" "$OUTPUT/hermes/webui"
 docker image inspect "$PYTHON_IMAGE" --format '{{.Id}}' > "$OUTPUT/hermes/python-image-id"
 docker image inspect "$WEBUI_IMAGE" --format '{{.Id}}' > "$OUTPUT/hermes/webui-image-id"
 cat > "$OUTPUT/hermes/runtime.json" <<EOF
