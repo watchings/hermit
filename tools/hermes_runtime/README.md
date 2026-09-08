@@ -37,6 +37,13 @@ directory and does not download a rootfs, PRoot, or Python package while
 assembling the APK. This checkout intentionally does not contain the runtime
 binaries; a cache must be provisioned before the workflow can package them.
 
+The provisioned cache is published as `hermes-runtime-aarch64.tar.gz` under the
+immutable `hermes-runtime-v1` GitHub release, together with its `.sha256`
+checksum, manifest, lockfile, and notices. Android CI downloads that release
+asset and verifies it before copying files into APK assets. The
+`Hermes Runtime Release` workflow is the supported manual update path and
+requires both a prebuilt cache URL and its SHA-256.
+
 The bundle must include the licenses and source references for Ubuntu, PRoot,
 CPython, Hermes Agent, Hermes WebUI assets, and every Python dependency. MIT
 notices do not replace the LGPL-3 corresponding-source obligations of Hermit.

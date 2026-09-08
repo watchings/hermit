@@ -13,6 +13,11 @@ on:
           - ':app:assembleNightly'
           - ':app:assembleClone'
           - ':app:bundleRelease'
+      hermes_runtime_release:
+        description: Immutable Hermes runtime release tag
+        required: false
+        default: hermes-runtime-v1
+        type: string
   push:
     branches: [main]
     paths:
@@ -61,6 +66,8 @@ env:
   ANDROID_API_LEVEL: '26'
   RUST_VERSION: '1.88.0'
   MANUAL_DEPS_DIR: manual-deps
+  HERMES_RUNTIME_RELEASE: hermes-runtime-v1
+  HERMES_RUNTIME_ASSET: hermes-runtime-aarch64.tar.gz
 
 jobs:
   build:
@@ -138,23 +145,30 @@ jobs:
           path: app/build/generated/stt-model-assets
           key: stt-model-assets-${{ runner.os }}-${{ hashFiles('app/config/stt-model-assets.properties') }}
 
-      - name: Restore Hermes runtime cache
-        id: cache-hermes-runtime
-        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
-        with:
-          path: hermes-runtime-cache
-          key: hermes-runtime-aarch64-${{ hashFiles('tools/hermes_runtime/manifest.json', 'tools/hermes_runtime/requirements-aarch64.lock') }}
-
-      - name: Prepare Hermes runtime assets
+      - name: Download Hermes runtime release
         shell: bash
         env:
-          HERMES_RUNTIME_CACHE: ${{ github.workspace }}/hermes-runtime-cache
+          GH_TOKEN: ${{ github.token }}
+          HERMES_RUNTIME_RELEASE_INPUT: ${{ inputs.hermes_runtime_release }}
         run: |
           set -euo pipefail
-          if [[ "${{ steps.cache-hermes-runtime.outputs.cache-hit }}" != "true" ]]; then
-            echo "Hermes runtime cache is not provisioned; refusing to download binaries in CI." >&2
-            exit 1
-          fi
+          release="${HERMES_RUNTIME_RELEASE_INPUT:-$HERMES_RUNTIME_RELEASE}"
+          mkdir -p hermes-runtime-cache
+          gh release download "$release" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern "$HERMES_RUNTIME_ASSET" \
+            --dir hermes-runtime-cache
+          gh release download "$release" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern "$HERMES_RUNTIME_ASSET.sha256" \
+            --dir hermes-runtime-cache
+          (cd hermes-runtime-cache && sha256sum --check "$HERMES_RUNTIME_ASSET.sha256")
+          tar -xzf "hermes-runtime-cache/$HERMES_RUNTIME_ASSET" -C hermes-runtime-cache
+          export HERMES_RUNTIME_CACHE="$GITHUB_WORKSPACE/hermes-runtime-cache"
+          export HERMES_RUNTIME_MANIFEST="$HERMES_RUNTIME_CACHE/manifest.json"
+          export HERMES_RUNTIME_REQUIREMENTS="$HERMES_RUNTIME_CACHE/requirements-aarch64.lock"
+          export HERMES_RUNTIME_LICENSES="$HERMES_RUNTIME_CACHE/LICENSES.txt"
+          bash tools/hermes_runtime/verify_release.sh
           bash tools/hermes_runtime/prepare_runtime.sh
 
       - name: Download Android dependencies

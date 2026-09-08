@@ -23,6 +23,11 @@ license text, source references, and the exact version or revision shipped.
 4. Separate network acquisition from the offline bundle and APK jobs.
 5. Publish the APK, bundle manifest, notices archive, and reproducibility hashes.
 6. Update package identity, task names, artifact names, and release metadata.
+7. Publish the verified runtime cache as the `hermes-runtime-v1` GitHub
+   release, with the tarball checksum, manifest, lockfile, and notices as
+   release assets.
+8. Use the manual `Hermes Runtime Release` workflow to replace that release
+   only after validating a new prebuilt cache.
 
 ## Acceptance criteria
 
@@ -32,6 +37,8 @@ license text, source references, and the exact version or revision shipped.
 - LGPL obligations and corresponding source availability are verified.
 - Offline packaging succeeds using only CI-cached, locked inputs.
 - No release artifact or package metadata uses the former application identity.
+- Android CI downloads only the selected runtime release and verifies its
+  checksum before APK packaging.
 
 ## Handoff
 

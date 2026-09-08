@@ -1,0 +1,76 @@
+name: Hermes Runtime Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Immutable release tag to create or replace
+        required: true
+        default: hermes-runtime-v1
+        type: string
+      bundle_url:
+        description: HTTPS URL of the prebuilt AArch64 runtime cache tarball
+        required: true
+        type: string
+      bundle_sha256:
+        description: SHA-256 of the runtime cache tarball
+        required: true
+        type: string
+      prerelease:
+        description: Mark the runtime release as prerelease
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Publish Hermes runtime bundle
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: ${{ inputs.release_tag }}
+      BUNDLE_URL: ${{ inputs.bundle_url }}
+      BUNDLE_SHA256: ${{ inputs.bundle_sha256 }}
+      BUNDLE_ASSET: hermes-runtime-aarch64.tar.gz
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          persist-credentials: false
+
+      - name: Download and verify runtime bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${#BUNDLE_SHA256}" -eq 64
+          [[ "$BUNDLE_SHA256" =~ ^[0-9a-f]{64}$ ]]
+          mkdir -p release-cache
+          curl --fail --location --retry 3 --output "release-cache/$BUNDLE_ASSET" "$BUNDLE_URL"
+          printf '%s  %s\n' "$BUNDLE_SHA256" "$BUNDLE_ASSET" > "release-cache/$BUNDLE_ASSET.sha256"
+          (cd release-cache && sha256sum --check "$BUNDLE_ASSET.sha256")
+          tar -xzf "release-cache/$BUNDLE_ASSET" -C release-cache
+          export HERMES_RUNTIME_CACHE="$GITHUB_WORKSPACE/release-cache"
+          export HERMES_RUNTIME_MANIFEST="$HERMES_RUNTIME_CACHE/manifest.json"
+          export HERMES_RUNTIME_REQUIREMENTS="$HERMES_RUNTIME_CACHE/requirements-aarch64.lock"
+          export HERMES_RUNTIME_LICENSES="$HERMES_RUNTIME_CACHE/LICENSES.txt"
+          bash tools/hermes_runtime/verify_release.sh
+
+      - name: Create or replace runtime release
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release delete "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --yes || true
+          gh release create "$RELEASE_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Hermes runtime $RELEASE_TAG" \
+            --notes "Hash-verified Ubuntu AArch64 PRoot runtime for Hermit. See manifest.json and LICENSES.txt." \
+            ${{ inputs.prerelease && '--prerelease' || '' }} \
+            "release-cache/$BUNDLE_ASSET" \
+            "release-cache/$BUNDLE_ASSET.sha256" \
+            "release-cache/manifest.json" \
+            "release-cache/requirements-aarch64.lock" \
+            "release-cache/LICENSES.txt"

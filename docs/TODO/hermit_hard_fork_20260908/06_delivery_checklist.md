@@ -34,6 +34,8 @@
 - [ ] LGPL/MIT obligations and source references are verified
 - [ ] CI checks lockfile drift, checksums, ABI, notices, and identity
 - [ ] Release artifacts include manifest, notices, and reproducibility hashes
+- [ ] `hermes-runtime-v1` contains the AArch64 bundle and checksum
+- [ ] Android CI downloads and verifies the selected runtime release asset
 
 ## Evidence and handoff
 

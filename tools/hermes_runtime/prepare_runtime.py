@@ -81,11 +81,21 @@ def main() -> None:
     parser.add_argument("--input", type=Path, required=True, help="pre-provisioned offline cache")
     parser.add_argument("--output", type=Path, required=True, help="Android assets destination")
     parser.add_argument("--manifest", type=Path, default=Path(__file__).with_name("manifest.json"))
+    parser.add_argument(
+        "--requirements",
+        type=Path,
+        default=Path(__file__).with_name("requirements-aarch64.lock"),
+    )
+    parser.add_argument(
+        "--licenses",
+        type=Path,
+        default=Path(__file__).with_name("LICENSES.txt"),
+    )
     args = parser.parse_args()
 
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     validate_lock_values(manifest, "manifest")
-    validate_requirements(Path(__file__).with_name("requirements-aarch64.lock"))
+    validate_requirements(args.requirements)
     artifacts = manifest.get("artifacts")
     if not isinstance(artifacts, list) or not artifacts:
         raise ValueError("manifest must define artifacts")
@@ -109,8 +119,8 @@ def main() -> None:
         if artifact["name"] == "proot":
             target.chmod(target.stat().st_mode | 0o111)
     shutil.copy2(args.manifest, args.output / "hermes/runtime.json")
-    shutil.copy2(Path(__file__).with_name("requirements-aarch64.lock"), args.output / "hermes/requirements-aarch64.lock")
-    shutil.copy2(Path(__file__).with_name("LICENSES.txt"), args.output / "hermes/LICENSES.txt")
+    shutil.copy2(args.requirements, args.output / "hermes/requirements-aarch64.lock")
+    shutil.copy2(args.licenses, args.output / "hermes/LICENSES.txt")
 
 
 if __name__ == "__main__":
