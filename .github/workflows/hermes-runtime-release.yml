@@ -8,12 +8,12 @@ on:
         required: true
         default: hermes-runtime-v1
         type: string
-      bundle_url:
-        description: HTTPS URL of the prebuilt AArch64 runtime cache tarball
+      hermes_agent_revision:
+        description: Hermes Agent commit SHA
         required: true
         type: string
-      bundle_sha256:
-        description: SHA-256 of the runtime cache tarball
+      hermes_webui_revision:
+        description: Hermes WebUI commit SHA
         required: true
         type: string
       prerelease:
@@ -33,31 +33,43 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       RELEASE_TAG: ${{ inputs.release_tag }}
-      BUNDLE_URL: ${{ inputs.bundle_url }}
-      BUNDLE_SHA256: ${{ inputs.bundle_sha256 }}
       BUNDLE_ASSET: hermes-runtime-aarch64.tar.gz
+      HERMES_AGENT_REVISION: ${{ inputs.hermes_agent_revision }}
+      HERMES_WEBUI_REVISION: ${{ inputs.hermes_webui_revision }}
     steps:
       - name: Checkout source
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
           persist-credentials: false
 
-      - name: Download and verify runtime bundle
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Pull AArch64 Python image
+        shell: bash
+        run: docker pull --platform linux/arm64 python:3.12-bookworm
+
+      - name: Build Hermes runtime image
         shell: bash
         run: |
           set -euo pipefail
-          test "${#BUNDLE_SHA256}" -eq 64
-          [[ "$BUNDLE_SHA256" =~ ^[0-9a-f]{64}$ ]]
-          mkdir -p release-cache
-          curl --fail --location --retry 3 --output "release-cache/$BUNDLE_ASSET" "$BUNDLE_URL"
-          printf '%s  %s\n' "$BUNDLE_SHA256" "$BUNDLE_ASSET" > "release-cache/$BUNDLE_ASSET.sha256"
-          (cd release-cache && sha256sum --check "$BUNDLE_ASSET.sha256")
-          tar -xzf "release-cache/$BUNDLE_ASSET" -C release-cache
-          export HERMES_RUNTIME_CACHE="$GITHUB_WORKSPACE/release-cache"
-          export HERMES_RUNTIME_MANIFEST="$HERMES_RUNTIME_CACHE/manifest.json"
-          export HERMES_RUNTIME_REQUIREMENTS="$HERMES_RUNTIME_CACHE/requirements-aarch64.lock"
-          export HERMES_RUNTIME_LICENSES="$HERMES_RUNTIME_CACHE/LICENSES.txt"
-          bash tools/hermes_runtime/verify_release.sh
+          docker buildx build \
+            --platform linux/arm64 \
+            --file tools/hermes_runtime/Dockerfile.runtime \
+            --build-arg PYTHON_IMAGE=python:3.12-bookworm \
+            --build-arg HERMES_AGENT_REVISION="$HERMES_AGENT_REVISION" \
+            --build-arg HERMES_WEBUI_REVISION="$HERMES_WEBUI_REVISION" \
+            --tag hermes-runtime:build \
+            --load \
+            .
+
+      - name: Export runtime image
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash tools/hermes_runtime/build_release_bundle.sh
 
       - name: Create or replace runtime release
         shell: bash

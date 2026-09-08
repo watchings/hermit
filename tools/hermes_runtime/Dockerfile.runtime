@@ -1,0 +1,29 @@
+ARG PYTHON_IMAGE=python:3.12-bookworm
+FROM ${PYTHON_IMAGE}
+
+ARG HERMES_AGENT_REVISION
+ARG HERMES_WEBUI_REVISION
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y ca-certificates git proot \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN test -n "$HERMES_AGENT_REVISION" \
+    && test -n "$HERMES_WEBUI_REVISION" \
+    && git clone https://github.com/NousResearch/hermes-agent /opt/hermes-agent \
+    && git -C /opt/hermes-agent checkout "$HERMES_AGENT_REVISION" \
+    && git clone https://github.com/nesquena/hermes-webui /opt/hermes-webui \
+    && git -C /opt/hermes-webui checkout "$HERMES_WEBUI_REVISION" \
+    && python -m pip install --no-cache-dir /opt/hermes-agent /opt/hermes-webui
+
+RUN mkdir -p /opt/hermes-python \
+    && python --version 2>&1 | tee /opt/hermes-python/python-version \
+    && python -m pip freeze --all > /opt/hermes-python/requirements-aarch64.lock \
+    && python -m compileall -q /opt/hermes-agent /opt/hermes-webui
+
+WORKDIR /opt

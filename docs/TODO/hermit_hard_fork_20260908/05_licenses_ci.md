@@ -28,6 +28,8 @@ license text, source references, and the exact version or revision shipped.
    release assets.
 8. Use the manual `Hermes Runtime Release` workflow to replace that release
    only after validating a new prebuilt cache.
+9. Build the release cache with Docker/QEMU rather than accepting an external
+   runtime archive.
 
 ## Acceptance criteria
 

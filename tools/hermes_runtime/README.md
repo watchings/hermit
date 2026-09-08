@@ -41,8 +41,10 @@ The provisioned cache is published as `hermes-runtime-aarch64.tar.gz` under the
 immutable `hermes-runtime-v1` GitHub release, together with its `.sha256`
 checksum, manifest, lockfile, and notices. Android CI downloads that release
 asset and verifies it before copying files into APK assets. The
-`Hermes Runtime Release` workflow is the supported manual update path and
-requires both a prebuilt cache URL and its SHA-256.
+`Hermes Runtime Release` workflow is the supported manual update path. It
+builds the pinned `python:3.12-bookworm` image for `linux/arm64` with QEMU,
+installs Hermes Agent and Hermes WebUI at the requested commit SHAs, exports
+the container filesystem, and uploads the resulting tarball and checksum.
 
 The bundle must include the licenses and source references for Ubuntu, PRoot,
 CPython, Hermes Agent, Hermes WebUI assets, and every Python dependency. MIT
