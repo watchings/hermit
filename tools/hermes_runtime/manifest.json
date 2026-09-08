@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "runtime": "hermes-agent",
+  "provisioningStatus": "awaiting-release-cache",
+  "target": {
+    "os": "linux",
+    "architecture": "aarch64",
+    "userspace": "ubuntu",
+    "launcher": "proot"
+  },
+  "artifacts": [
+    {
+      "name": "proot",
+      "source": "proot/bin/proot",
+      "target": "usr/bin/proot",
+      "kind": "file",
+      "sha256": ""
+    },
+    {
+      "name": "ubuntu-aarch64-rootfs",
+      "source": "rootfs/ubuntu-aarch64",
+      "target": "usr/var/lib/proot-distro/installed-rootfs/ubuntu",
+      "kind": "directory",
+      "sha256": ""
+    },
+    {
+      "name": "hermes-agent",
+      "source": "hermes/agent",
+      "target": "usr/var/lib/proot-distro/installed-rootfs/ubuntu/opt/hermes-agent",
+      "kind": "directory",
+      "sha256": ""
+    },
+    {
+      "name": "hermes-webui",
+      "source": "hermes/webui",
+      "target": "usr/var/lib/proot-distro/installed-rootfs/ubuntu/opt/hermes-webui",
+      "kind": "directory",
+      "sha256": ""
+    },
+    {
+      "name": "python-dependencies",
+      "source": "hermes/python",
+      "target": "usr/var/lib/proot-distro/installed-rootfs/ubuntu/opt/hermes-python",
+      "kind": "directory",
+      "sha256": ""
+    }
+  ],
+  "dependencyLocks": {
+    "cpython": {
+      "version": "3.12.8",
+      "source": "https://www.python.org/ftp/python/3.12.8/Python-3.12.8.tgz",
+      "sha256": ""
+    },
+    "proot": {
+      "version": "5.4.0",
+      "source": "https://github.com/proot-me/proot",
+      "revision": "v5.4.0",
+      "sha256": ""
+    },
+    "hermesAgent": {
+      "source": "https://github.com/NousResearch/hermes-agent",
+      "revision": "",
+      "sha256": ""
+    },
+    "hermesWebui": {
+      "source": "https://github.com/nesquena/hermes-webui",
+      "revision": "",
+      "sha256": ""
+    }
+  }
+}

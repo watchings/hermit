@@ -1,6 +1,7 @@
 ---
 title: Hermit hard fork and embedded Hermes runtime
 status: in-progress
+fork_repository: pending
 ---
 
 # Hermit hard fork and embedded Hermes runtime
@@ -16,18 +17,17 @@ runtime into the APK; a remote WebUI is not an acceptable implementation.
 
 ## Work units
 
-1. Inventory and pin the upstream Hermes sources, Python runtime, native wheels,
-   transitive licenses, and supported Android ABIs.
-2. Add an APK asset/native-runtime assembly step that produces a self-contained
-   Python environment during the Android build.
-3. Add a process supervisor and local IPC boundary for starting, stopping, logging,
-   and health-checking Hermes Agent inside the application sandbox.
-4. Persist the Hermes model/provider selection in the existing settings system and
-   expose it through the settings UI.
-5. Adapt the Hermes WebUI protocol to an in-process local UI boundary without
-   requiring a remote server.
-6. Rename the hard-fork application/package identity and update CI artifact names.
-7. Publish a third-party notices inventory and verify LGPL/MIT obligations.
+1. [Bundle pipeline](02_bundle_pipeline.md): inventory and pin the upstream Hermes
+   sources, Python runtime, native wheels, transitive licenses, and supported
+   Android ABIs.
+2. [Lifecycle and IPC](03_lifecycle_ipc.md): add a process supervisor and local
+   IPC boundary for starting, stopping, logging, and health-checking Hermes Agent.
+3. [Settings and UI](04_settings_ui.md): persist the Hermes model/provider
+   selection and adapt the WebUI protocol to an in-process local UI boundary.
+4. [Licenses and CI](05_licenses_ci.md): publish third-party notices, verify
+   LGPL/MIT obligations, and rename CI artifacts for the hard fork.
+5. [Delivery checklist](06_delivery_checklist.md): record release gates, evidence,
+   and the hand-off conditions for each work unit.
 
 ## Constraints
 

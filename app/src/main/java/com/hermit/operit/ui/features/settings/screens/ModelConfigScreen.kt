@@ -799,6 +799,15 @@ fun ModelConfigScreen(
                 }
 
                 item {
+                    HermesAgentSettingsSection(
+                        config = config,
+                        configManager = configManager,
+                        saveCoordinator = saveCoordinator,
+                        showNotification = { message -> showNotification(message) }
+                    )
+                }
+
+                item {
                     ContextSummarySettingsSection(
                         config = config,
                         configManager = configManager,
@@ -841,6 +850,73 @@ fun ModelConfigScreen(
                         keyAvailabilityTester = keyAvailabilityTester,
                         showNotification = { message -> showNotification(message) }
                     )
+                }
+            }
+
+            @Composable
+            fun HermesAgentSettingsSection(
+                config: ModelConfigData,
+                configManager: ModelConfigManager,
+                saveCoordinator: ModelConfigSaveCoordinator,
+                showNotification: (String) -> Unit
+            ) {
+                var modelInput by remember(config.id) { mutableStateOf(config.hermesAgentModel) }
+                val saveFailedText = stringResource(R.string.save_failed)
+                val latestModelInput by rememberUpdatedState(modelInput)
+
+                suspend fun persistModel(value: String) {
+                    configManager.updateHermesAgentModel(config.id, value)
+                }
+
+                RegisterModelConfigSaveAction(
+                    coordinator = saveCoordinator,
+                    key = "hermes-agent-model:${config.id}",
+                    action = { _ -> persistModel(latestModelInput) }
+                )
+
+                DebouncedModelConfigAutoSaveEffect(
+                    effectKey = "hermes-agent-model:${config.id}",
+                    valueProvider = { modelInput },
+                    persist = { value ->
+                        try {
+                            persistModel(value)
+                        } catch (e: Exception) {
+                            AppLogger.e("ModelConfigScreen", "保存 Hermes Agent 模型失败", e)
+                            throw e
+                        }
+                    },
+                    onError = { error ->
+                        AppLogger.e("ModelConfigScreen", "保存 Hermes Agent 模型失败", error)
+                        showNotification(error.message ?: saveFailedText)
+                    }
+                )
+
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        SettingsSectionHeader(
+                            icon = Icons.Default.SmartToy,
+                            title = stringResource(R.string.hermes_agent_model_title),
+                            subtitle = stringResource(R.string.hermes_agent_model_subtitle)
+                        )
+                        SettingsTextField(
+                            title = stringResource(R.string.hermes_agent_model_label),
+                            value = modelInput,
+                            onValueChange = { modelInput = it },
+                            placeholder = stringResource(R.string.hermes_agent_model_placeholder),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                imeAction = ImeAction.Done
+                            )
+                        )
+                    }
                 }
             }
 

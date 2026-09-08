@@ -665,6 +665,12 @@ class ModelConfigManager(
         }
     }
 
+    suspend fun updateHermesAgentModel(configId: String, hermesAgentModel: String): ModelConfigData {
+        return updateConfigInternal(configId) {
+            it.copy(hermesAgentModel = hermesAgentModel.trim())
+        }
+    }
+
     // 更新模型配置 - 包含API提供商类型
     suspend fun updateModelConfig(
             configId: String,

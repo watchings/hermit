@@ -100,6 +100,8 @@ data class ModelConfigData(
         val modelName: String = "",
         val apiProviderType: ApiProviderType = ApiProviderType.DEEPSEEK,
         val apiProviderTypeId: String = apiProviderType.name,
+        // Hermes Agent 使用的模型标识；为空时由 Hermes Agent 按其运行时配置决定
+        val hermesAgentModel: String = "",
 
         // 多API Key支持
         val useMultipleApiKeys: Boolean = false, // 是否启用多API Key模式

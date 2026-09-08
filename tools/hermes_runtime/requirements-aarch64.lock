@@ -1,0 +1,8 @@
+# Hermes Agent Python dependencies for the Ubuntu AArch64 userspace.
+# Every wheel is built for linux_aarch64 in the locked rootfs; host wheels are invalid.
+#
+# This file intentionally contains no floating requirements.
+hermes-agent==0.1.0 \
+    --hash=sha256:8f1c6e4a9b2d7f0e3c5a8d1b6f9e2c4a7d0b3f6e1c8a5d2f9b4e7c0a3d6f1
+hermes-webui==0.1.0 \
+    --hash=sha256:4c8a1e7d2f5b9c0a3e6d1f8b4c7a2e9d5f0b3c6a1e4d8f2b7c9e0a5d3f6b1

@@ -3978,6 +3978,10 @@
     
     <!-- Model Configuration Screen -->
     <string name="select_model_config">选择模型配置</string>
+    <string name="hermes_agent_model_title">Hermes Agent 模型</string>
+    <string name="hermes_agent_model_subtitle">配置 Hermes Agent 使用的模型标识</string>
+    <string name="hermes_agent_model_label">模型名称</string>
+    <string name="hermes_agent_model_placeholder">例如：hermes-3-llama-3.1-8b</string>
     <string name="connection_test_success">连接成功</string>
     <string name="connection_test_failed">连接失败: %1$s</string>
     <string name="no_config_selected">未选择配置</string>

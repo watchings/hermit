@@ -30,6 +30,7 @@ import com.hermit.plugins.lifecycle.AppLifecycleHookPluginRegistry
 import com.hermit.core.config.SystemPromptConfig
 import com.hermit.core.tools.AIToolHandler
 import com.hermit.core.tools.system.AndroidShellExecutor
+import com.hermit.core.tools.system.HermesRuntimeManager
 import com.hermit.core.tools.system.Terminal
 import com.hermit.core.workflow.WorkflowSchedulerInitializer
 import com.hermit.data.backup.RoomDatabaseBackupPreferences
@@ -137,6 +138,7 @@ class OperitApplication : Application(), ImageLoaderFactory, WorkConfiguration.P
         }
 
         globalImageLoader = ImageLoader.Builder(this).build()
+        HermesRuntimeManager.initialize(this)
     }
 
     fun initializeMainApplication() {

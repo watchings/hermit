@@ -33,7 +33,7 @@ class HermesPythonRuntime(context: Context) {
         return Layout(
             rootfs = File(filesDir, ROOTFS_RELATIVE_PATH),
             proot = File(filesDir, PROOT_RELATIVE_PATH),
-            agent = File(filesDir, "hermes/agent")
+            agent = File(filesDir, "$ROOTFS_RELATIVE_PATH/opt/hermes-agent")
         )
     }
 

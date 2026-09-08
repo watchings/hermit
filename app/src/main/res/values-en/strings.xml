@@ -4022,6 +4022,10 @@
   
     <!-- Model Configuration Screen -->
     <string name="select_model_config">Select Model Configuration</string>
+    <string name="hermes_agent_model_title">Hermes Agent model</string>
+    <string name="hermes_agent_model_subtitle">Set the model identifier used by Hermes Agent</string>
+    <string name="hermes_agent_model_label">Model name</string>
+    <string name="hermes_agent_model_placeholder">For example: hermes-3-llama-3.1-8b</string>
     <string name="connection_test_success">Connection Success</string>
     <string name="connection_test_failed">Connection Failed: %1$s</string>
     <string name="no_config_selected">No Configuration Selected</string>

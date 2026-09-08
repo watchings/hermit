@@ -1,0 +1,17 @@
+Hermes runtime dependency and license inventory
+
+This file is part of the source-controlled bundle contract. The prepared
+bundle must record the exact version/revision and corresponding license text or
+a stable source URL before release.
+
+* Hermes Agent — source and license: see manifest.json hermesAgent.
+* Hermes WebUI — source and license: see manifest.json hermesWebui.
+* CPython 3.12.8 — PSF-2.0; source URL is recorded in manifest.json.
+* Ubuntu AArch64 rootfs — Ubuntu licenses and notices must be shipped with the
+  rootfs and recorded by the image provider.
+* PRoot 5.4.0 — GPL-2.0-or-later; source URL is recorded in manifest.json.
+* Python dependencies — each package's license and source URL must be listed
+  by the cache provisioner next to the locked wheel.
+
+The repository does not contain these runtime binaries. Preparation consumes
+only a pre-provisioned, hash-verified cache and never downloads them.

@@ -19,9 +19,9 @@ hermes/
 ```
 
 `app/src/main/assets/hermes/runtime.json` pins the runtime contract. The
-`rootfsSha256` value must be replaced by the hash of the exact rootfs archive
-before publishing an APK. Gradle and release automation must verify this hash
-before copying the bundle into the APK.
+manifest contains a SHA-256 for every cache artifact. The offline preparation
+script refuses missing, malformed, repeated, or placeholder hashes and verifies
+each provisioned file or directory before copying it into the APK assets.
 
 The rootfs must contain Python 3, certificates, `/bin/sh`, and the shared
 libraries required by the locked Hermes dependencies. Python wheels with native
@@ -31,9 +31,11 @@ inputs.
 
 ## Build policy
 
-Runtime archives are prepared in CI and checked into the dependency cache with
-their SHA-256 manifest. The Gradle task consumes that prepared directory and
-does not download a rootfs or Python package while assembling the APK.
+Runtime archives are provisioned outside this repository and restored in CI
+from the hash-keyed dependency cache. `prepare_runtime.sh` consumes that
+directory and does not download a rootfs, PRoot, or Python package while
+assembling the APK. This checkout intentionally does not contain the runtime
+binaries; a cache must be provisioned before the workflow can package them.
 
 The bundle must include the licenses and source references for Ubuntu, PRoot,
 CPython, Hermes Agent, Hermes WebUI assets, and every Python dependency. MIT
