@@ -18,7 +18,7 @@ class HermesPythonRuntime(context: Context) {
         private const val ROOTFS_RELATIVE_PATH =
             "usr/var/lib/proot-distro/installed-rootfs/ubuntu"
         private const val PROOT_RELATIVE_PATH = "usr/bin/proot"
-        private const val PYTHON_PATH = "/usr/bin/python3"
+        private const val PYTHON_PATH = "/usr/local/bin/python3"
         private const val AGENT_PATH = "/opt/hermes-agent"
     }
 

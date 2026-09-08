@@ -23,13 +23,9 @@ license text, source references, and the exact version or revision shipped.
 4. Separate network acquisition from the offline bundle and APK jobs.
 5. Publish the APK, bundle manifest, notices archive, and reproducibility hashes.
 6. Update package identity, task names, artifact names, and release metadata.
-7. Publish the verified runtime cache as the `hermes-runtime-v1` GitHub
-   release, with the tarball checksum, manifest, lockfile, and notices as
-   release assets.
-8. Use the manual `Hermes Runtime Release` workflow to replace that release
-   only after validating a new prebuilt cache.
-9. Build the release cache with Docker/QEMU rather than accepting an external
-   runtime archive.
+7. Pull the AArch64 Python and Hermes WebUI images directly during Android CI.
+8. Export the pulled WebUI container filesystem into APK assets without
+   creating a runtime archive or release.
 
 ## Acceptance criteria
 

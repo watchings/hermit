@@ -6,22 +6,21 @@ the PRoot binary already provided by the terminal environment.
 
 ## Bundle layout
 
-The release bundle is installed under the application files directory:
+The Docker-provisioned assets use this layout:
 
 ```text
 usr/
   bin/proot
   var/lib/proot-distro/installed-rootfs/ubuntu/
 hermes/
-  agent/
+  webui/
   requirements-aarch64.lock
   LICENSES.txt
 ```
 
-`app/src/main/assets/hermes/runtime.json` pins the runtime contract. The
-manifest contains a SHA-256 for every cache artifact. The offline preparation
-script refuses missing, malformed, repeated, or placeholder hashes and verifies
-each provisioned file or directory before copying it into the APK assets.
+`app/src/main/assets/hermes/runtime.json` records the image references used for
+the build. The Docker preparation script copies only the pulled AArch64
+container filesystem into APK assets.
 
 The rootfs must contain Python 3, certificates, `/bin/sh`, and the shared
 libraries required by the locked Hermes dependencies. Python wheels with native
@@ -31,21 +30,14 @@ inputs.
 
 ## Build policy
 
-Runtime archives are provisioned outside this repository and restored in CI
-from the hash-keyed dependency cache. `prepare_runtime.sh` consumes that
-directory and does not download a rootfs, PRoot, or Python package while
-assembling the APK. This checkout intentionally does not contain the runtime
-binaries; a cache must be provisioned before the workflow can package them.
+The runtime is provisioned directly by Android CI. No runtime archive is
+created, checked into the repository, or uploaded to a release.
 
-The provisioned cache is published as `hermes-runtime-aarch64.tar.gz` under the
-immutable `hermes-runtime-v1` GitHub release, together with its `.sha256`
-checksum, manifest, lockfile, and notices. Android CI downloads that release
-asset and verifies it before copying files into APK assets. The
-`Hermes Runtime Release` workflow is the supported manual update path. It uses
-the current Hermes Agent `main` and Hermes WebUI `master` branches, builds the
-pinned `python:3.12-bookworm` image for `linux/arm64` with QEMU, installs both
-projects' dependencies, exports the container filesystem, and records the
-resolved revisions in the manifest.
+Android CI pulls the AArch64 `python:3.12-bookworm` image and
+`ghcr.io/nesquena/hermes-webui:latest` directly. It installs PRoot into the
+WebUI container, exports that container filesystem directly into APK assets,
+and records the image references in `hermes/runtime.json`; no runtime archive
+or runtime release is created.
 
 The bundle must include the licenses and source references for Ubuntu, PRoot,
 CPython, Hermes Agent, Hermes WebUI assets, and every Python dependency. MIT
