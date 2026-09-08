@@ -11,6 +11,7 @@ distribution or APK build step for Python wheels.
 The APK build must receive a reproducible Hermes bundle containing:
 
 - a pinned CPython runtime suitable for the supported Android ABI
+- an Ubuntu AArch64 PRoot userspace containing the Python interpreter
 - Hermes Agent source and its locked Python dependency graph
 - required pure-Python packages and ABI-matched native extensions
 - Hermes WebUI source/assets needed by the local UI boundary
@@ -24,6 +25,8 @@ crashes, cancellation, and app restarts are observable.
 
 - A clean CI checkout can assemble the bundle without network access during the
   Gradle task itself.
+- The runtime manifest identifies one exact AArch64 rootfs and its SHA-256
+  before it is copied into an APK.
 - First application initialization starts the bundled agent locally.
 - The settings screen can select and persist the Hermes model/provider.
 - No feature depends on a remote Hermes WebUI URL.

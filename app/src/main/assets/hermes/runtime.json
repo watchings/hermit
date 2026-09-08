@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "name": "ubuntu-aarch64",
+  "architecture": "aarch64",
+  "rootfsDirectory": "usr/var/lib/proot-distro/installed-rootfs/ubuntu",
+  "pythonExecutable": "/usr/bin/python3",
+  "prootExecutable": "/usr/bin/proot",
+  "agentDirectory": "/opt/hermes-agent",
+  "requirementsLock": "hermes/requirements-aarch64.lock",
+  "rootfsSha256": "REPLACE_WITH_RELEASE_HASH",
+  "licenseNotice": "hermes/LICENSES.txt"
+}
