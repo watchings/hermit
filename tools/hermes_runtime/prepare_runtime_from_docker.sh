@@ -6,7 +6,7 @@ OUTPUT="$ROOT/app/src/main/assets"
 WORK="$ROOT/.hermes-docker-runtime"
 PYTHON_IMAGE="${PYTHON_IMAGE:-python:3.12-bookworm}"
 WEBUI_IMAGE="${WEBUI_IMAGE:-ghcr.io/nesquena/hermes-webui:latest}"
-TERMUX_PACKAGES_URL="${TERMUX_PACKAGES_URL:-https://packages.termux.dev/apt/termux-main}"
+PROOT_PACKAGE_URL="${PROOT_PACKAGE_URL:-https://dl-cdn.alpinelinux.org/alpine/edge/community/aarch64/proot-static-5.4.0-r2.apk}"
 
 rm -rf "$WORK" "$OUTPUT/usr" "$OUTPUT/hermes"
 mkdir -p "$WORK" "$OUTPUT/usr/var/lib/proot-distro/installed-rootfs/ubuntu"
@@ -20,35 +20,15 @@ webui_container_id="$(docker create --platform=linux/arm64 "$WEBUI_IMAGE")"
 trap 'docker rm --force "$python_container_id" "$webui_container_id" >/dev/null' EXIT
 
 docker export "$python_container_id" | tar -x -C "$OUTPUT/usr/var/lib/proot-distro/installed-rootfs/ubuntu"
-termux_index="$WORK/termux-packages.gz"
 curl --fail --location --proto '=https' --tlsv1.2 \
-  "$TERMUX_PACKAGES_URL/dists/stable/main/binary-aarch64/Packages.gz" \
-  -o "$termux_index"
-termux_package="$(
-  gzip -dc "$termux_index" |
-    awk '
-      /^Package: proot$/ { found=1 }
-      found && /^Filename:/ { print $2; exit }
-    '
-)"
-termux_sha256="$(
-  gzip -dc "$termux_index" |
-    awk '
-      /^Package: proot$/ { found=1 }
-      found && /^SHA256:/ { print $2; exit }
-    '
-)"
-test -n "$termux_package"
-test "${#termux_sha256}" -eq 64
-curl --fail --location --proto '=https' --tlsv1.2 \
-  "$TERMUX_PACKAGES_URL/$termux_package" -o "$WORK/proot.deb"
-printf '%s  %s\n' "$termux_sha256" "$WORK/proot.deb" | sha256sum --check
-mkdir -p "$WORK/termux"
-ar p "$WORK/proot.deb" data.tar.xz | tar -xJ -C "$WORK/termux"
+  "$PROOT_PACKAGE_URL" -o "$WORK/proot-static.apk"
+mkdir -p "$WORK/alpine"
+tar -xzf "$WORK/proot-static.apk" -C "$WORK/alpine"
 install -Dm755 \
-  "$WORK/termux/data/data/com.termux/files/usr/bin/proot" \
+  "$WORK/alpine/usr/bin/proot.static" \
   "$OUTPUT/usr/bin/proot"
 file "$OUTPUT/usr/bin/proot" | grep -Eiq 'aarch64|arm64'
+file "$OUTPUT/usr/bin/proot" | grep -Eiq 'static'
 
 mkdir -p "$OUTPUT/hermes"
 mkdir -p "$WORK/webui"
@@ -72,9 +52,8 @@ cat > "$OUTPUT/hermes/runtime.json" <<EOF
     "webui": "$WEBUI_IMAGE"
   },
   "proot": {
-    "source": "$TERMUX_PACKAGES_URL/$termux_package",
-    "sha256": "$termux_sha256",
-    "type": "precompiled-termux-aarch64"
+    "source": "$PROOT_PACKAGE_URL",
+    "type": "precompiled-static-alpine-aarch64"
   }
 }
 EOF
