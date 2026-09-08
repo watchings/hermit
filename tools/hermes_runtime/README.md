@@ -34,10 +34,11 @@ The runtime is provisioned directly by Android CI. No runtime archive is
 created, checked into the repository, or uploaded to a release.
 
 Android CI pulls the AArch64 `python:3.12-bookworm` image and
-`ghcr.io/nesquena/hermes-webui:latest` directly. It installs PRoot into the
-WebUI container, exports that container filesystem directly into APK assets,
-and records the image references in `hermes/runtime.json`; no runtime archive
-or runtime release is created.
+`ghcr.io/nesquena/hermes-webui:latest` directly. It resolves the current
+AArch64 `proot` package from the official Termux repository, verifies its
+repository SHA-256, extracts the precompiled Android binary, and exports the
+container filesystem directly into APK assets; no runtime archive or runtime
+release is created.
 
 The bundle must include the licenses and source references for Ubuntu, PRoot,
 CPython, Hermes Agent, Hermes WebUI assets, and every Python dependency. MIT
