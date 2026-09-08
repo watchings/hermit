@@ -138,17 +138,6 @@ jobs:
           path: app/build/generated/stt-model-assets
           key: stt-model-assets-${{ runner.os }}-${{ hashFiles('app/config/stt-model-assets.properties') }}
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm64
-
-      - name: Provision Hermes runtime from Docker images
-        shell: bash
-        run: |
-          set -euo pipefail
-          bash tools/hermes_runtime/prepare_runtime_from_docker.sh
-
       - name: Download Android dependencies
         if: steps.cache-manual-deps.outputs.cache-hit != 'true'
         run: bash ci/script/download_android_dependencies.sh full "$MANUAL_DEPS_DIR"

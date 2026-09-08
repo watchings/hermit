@@ -1,26 +1,31 @@
-# Hermit Hermes PRoot runtime
+# Hermit Hermes runtime setup
 
-Hermes Agent runs inside an AArch64 Linux userspace rather than directly in the
-Android VM. The supported runtime is an Ubuntu AArch64 rootfs launched through
-the PRoot binary already provided by the terminal environment.
+Hermes runs inside an AArch64 Linux userspace rather than directly in the
+Android VM. The runtime is not part of the APK. During first setup,
+`app/src/main/assets/hermes/download_runtime.sh` downloads the
+`ghcr.io/nesquena/hermes-webui:latest` arm64 image and Alpine's static PRoot
+binary into the app-private runtime directory.
 
-## Bundle layout
+The setup script prints each image layer and uses curl's progress bar for both
+the image blobs and PRoot download, so its stdout/stderr can be attached to the
+in-app terminal.
 
-The Docker-provisioned assets use this layout:
+## Runtime layout
+
+The installed runtime uses this layout:
 
 ```text
 usr/
   bin/proot
   var/lib/proot-distro/installed-rootfs/ubuntu/
 hermes/
-  webui/
-  requirements-aarch64.lock
-  LICENSES.txt
+  image
+  image-digest
 ```
 
-`app/src/main/assets/hermes/runtime.json` records the image references used for
-the build. The Docker preparation script copies only the pulled AArch64
-container filesystem into APK assets.
+The script writes the selected image digest to `hermes/image-digest` and writes
+the image reference to `hermes/image`. The runtime directory is only populated
+after all layers have been downloaded and extracted.
 
 The rootfs must contain Python 3, certificates, `/bin/sh`, and the shared
 libraries required by the locked Hermes dependencies. Python wheels with native
@@ -30,16 +35,10 @@ inputs.
 
 ## Build policy
 
-The runtime is provisioned directly by Android CI. No runtime archive is
-created, checked into the repository, or uploaded to a release.
+Android CI does not pull or package the runtime. No runtime archive, container
+filesystem, or runtime release is created by the APK build.
 
-Android CI pulls the AArch64 `python:3.12-bookworm` image and
-`ghcr.io/nesquena/hermes-webui:latest` directly. It downloads the Alpine
-`proot-static` AArch64 package, extracts `usr/bin/proot.static`, verifies that
-the binary is AArch64 and statically linked, and exports the container
-filesystem directly into APK assets; no runtime archive or runtime release is
-created.
-
-The bundle must include the licenses and source references for Ubuntu, PRoot,
-CPython, Hermes Agent, Hermes WebUI assets, and every Python dependency. MIT
-notices do not replace the LGPL-3 corresponding-source obligations of Hermit.
+The source repository must retain the licenses and source references for Ubuntu,
+PRoot, CPython, Hermes Agent, Hermes WebUI assets, and every Python dependency.
+MIT notices do not replace the LGPL-3 corresponding-source obligations of
+Hermit.
