@@ -21,9 +21,7 @@ cp "$WORK/rootfs/ubuntu-aarch64/opt/hermes-python/requirements-aarch64.lock" \
   "$WORK/requirements-aarch64.lock"
 cp "$ROOT/tools/hermes_runtime/LICENSES.txt" "$WORK/LICENSES.txt"
 
-HERMES_AGENT_REVISION="${HERMES_AGENT_REVISION:?HERMES_AGENT_REVISION is required}"
-HERMES_WEBUI_REVISION="${HERMES_WEBUI_REVISION:?HERMES_WEBUI_REVISION is required}"
-export HERMES_AGENT_REVISION HERMES_WEBUI_REVISION WORK
+export WORK
 python3 - <<'PY'
 import hashlib
 import json
@@ -76,12 +74,14 @@ manifest = {
         },
         "hermesAgent": {
             "source": "https://github.com/NousResearch/hermes-agent",
-            "revision": os.environ["HERMES_AGENT_REVISION"],
+            "branch": "main",
+            "revision": (work / "rootfs/ubuntu-aarch64/opt/hermes-agent-revision").read_text(encoding="utf-8").strip(),
             "sha256": digest(work / "hermes/agent"),
         },
         "hermesWebui": {
             "source": "https://github.com/nesquena/hermes-webui",
-            "revision": os.environ["HERMES_WEBUI_REVISION"],
+            "branch": "master",
+            "revision": (work / "rootfs/ubuntu-aarch64/opt/hermes-webui-revision").read_text(encoding="utf-8").strip(),
             "sha256": digest(work / "hermes/webui"),
         },
     },

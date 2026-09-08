@@ -8,14 +8,6 @@ on:
         required: true
         default: hermes-runtime-v1
         type: string
-      hermes_agent_revision:
-        description: Hermes Agent commit SHA
-        required: true
-        type: string
-      hermes_webui_revision:
-        description: Hermes WebUI commit SHA
-        required: true
-        type: string
       prerelease:
         description: Mark the runtime release as prerelease
         required: true
@@ -34,8 +26,6 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       RELEASE_TAG: ${{ inputs.release_tag }}
       BUNDLE_ASSET: hermes-runtime-aarch64.tar.gz
-      HERMES_AGENT_REVISION: ${{ inputs.hermes_agent_revision }}
-      HERMES_WEBUI_REVISION: ${{ inputs.hermes_webui_revision }}
     steps:
       - name: Checkout source
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
@@ -59,8 +49,6 @@ jobs:
             --platform linux/arm64 \
             --file tools/hermes_runtime/Dockerfile.runtime \
             --build-arg PYTHON_IMAGE=python:3.12-bookworm \
-            --build-arg HERMES_AGENT_REVISION="$HERMES_AGENT_REVISION" \
-            --build-arg HERMES_WEBUI_REVISION="$HERMES_WEBUI_REVISION" \
             --tag hermes-runtime:build \
             --load \
             .

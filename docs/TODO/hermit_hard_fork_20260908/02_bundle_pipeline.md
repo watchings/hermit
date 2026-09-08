@@ -35,8 +35,8 @@ bundle is an immutable build input, not a runtime download.
 7. Make the APK packaging task depend on the verified bundle task.
 8. Build the AArch64 image with Docker Buildx and QEMU from the pinned Python
    image.
-9. Install Hermes Agent and Hermes WebUI at their requested commit SHAs, export
-   the container filesystem, and publish the tarball with its checksum.
+9. Install Hermes Agent from `main` and Hermes WebUI from `master`, export the
+   container filesystem, and record the resolved revisions in the manifest.
 
 ## Acceptance criteria
 
