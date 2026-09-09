@@ -11,4 +11,4 @@ interface IAccessibilityProvider {
     boolean takeScreenshot(String path, String format);
     boolean isAccessibilityServiceEnabled();
     String getCurrentActivityName();
-} 
+}

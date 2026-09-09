@@ -11,4 +11,4 @@ oneway interface IAccessibilityEventCallback {
      * @param event The captured AccessibilityEvent object.
      */
     void onAccessibilityEvent(in AccessibilityEvent event);
-} 
+}
