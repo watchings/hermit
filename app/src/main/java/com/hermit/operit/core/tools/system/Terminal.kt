@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.transformWhile
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.channelFlow
@@ -163,13 +163,11 @@ class Terminal private constructor(private val context: Context) {
                 commandEvents
                     .filter { it.sessionId == sessionId && it.commandId == commandId }
                     .onStart { collectorReady.complete(Unit) }
-                    .transformWhile { event ->
-                        emit(event)
+                    .takeWhile { event ->
+                        send(event)
                         !event.isCompleted
                     }
-                    .collect { sentEvent ->
-                        send(sentEvent)
-                    }
+                    .collect()
             }
 
             // 先确保事件收集器就绪，再发送命令，避免快命令输出在订阅前丢失。
