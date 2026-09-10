@@ -66,9 +66,9 @@ import com.hermit.core.config.FunctionalPrompts
 import com.hermit.data.preferences.ApiPreferences
 import com.hermit.data.preferences.FunctionalConfigManager
 import com.hermit.data.preferences.ModelConfigManager
-import com.hermit.terminal.TerminalManager
-import com.hermit.terminal.provider.filesystem.FileSystemProvider
-import com.hermit.terminal.utils.SSHFileConnectionManager
+import com.ai.assistance.operit.terminal.TerminalManager
+import com.ai.assistance.operit.terminal.provider.filesystem.FileSystemProvider
+import com.ai.assistance.operit.terminal.utils.SSHFileConnectionManager
 import com.hermit.core.tools.defaultTool.PathValidator
 import com.hermit.util.LocaleUtils
 import com.hermit.util.ripgrep.NativeRipgrep

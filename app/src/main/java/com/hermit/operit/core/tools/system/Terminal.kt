@@ -4,11 +4,11 @@ import android.content.Context
 import android.os.Build
 import com.hermit.util.AppLogger
 import androidx.annotation.RequiresApi
-import com.hermit.terminal.CommandExecutionEvent
-import com.hermit.terminal.SessionDirectoryEvent
-import com.hermit.terminal.TerminalManager
-import com.hermit.terminal.data.TerminalState
-import com.hermit.terminal.provider.type.HiddenExecResult
+import com.ai.assistance.operit.terminal.CommandExecutionEvent
+import com.ai.assistance.operit.terminal.SessionDirectoryEvent
+import com.ai.assistance.operit.terminal.TerminalManager
+import com.ai.assistance.operit.terminal.data.TerminalState
+import com.ai.assistance.operit.terminal.provider.type.HiddenExecResult
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

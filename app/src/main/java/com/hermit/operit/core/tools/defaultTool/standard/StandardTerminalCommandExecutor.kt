@@ -7,8 +7,8 @@ import com.hermit.core.tools.*
 import com.hermit.data.model.AITool
 import com.hermit.data.model.ToolResult
 import com.hermit.core.tools.system.Terminal
-import com.hermit.terminal.provider.type.HiddenExecResult
-import com.hermit.terminal.view.domain.ansi.TerminalChar
+import com.ai.assistance.operit.terminal.provider.type.HiddenExecResult
+import com.ai.assistance.operit.terminal.view.domain.ansi.TerminalChar
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

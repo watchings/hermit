@@ -787,72 +787,6 @@ fun ModelConfigScreen(
                 }
             }
 
-            selectedConfig.value?.let { config ->
-                item {
-                    ModelApiSettingsSection(
-                        config = config,
-                        configManager = configManager,
-                        saveCoordinator = saveCoordinator,
-                        showNotification = { message -> showNotification(message) },
-                        navigateToMnnModelDownload = navigateToMnnModelDownload
-                    )
-                }
-
-                item {
-                    HermesAgentSettingsSection(
-                        config = config,
-                        configManager = configManager,
-                        saveCoordinator = saveCoordinator,
-                        showNotification = { message -> showNotification(message) }
-                    )
-                }
-
-                item {
-                    ContextSummarySettingsSection(
-                        config = config,
-                        configManager = configManager,
-                        scope = scope,
-                        showNotification = { message -> showNotification(message) }
-                    )
-                }
-
-                item {
-                    ThinkingConfigurationsSection(
-                        config = config,
-                        configManager = configManager,
-                        saveCoordinator = saveCoordinator,
-                        showNotification = { message -> showNotification(message) }
-                    )
-                }
-
-                item {
-                    ModelParametersSection(
-                        config = config,
-                        configManager = configManager,
-                        showNotification = { message -> showNotification(message) }
-                    )
-                }
-
-                item {
-                    CustomHeadersSettingsSection(
-                        config = config,
-                        configManager = configManager,
-                        saveCoordinator = saveCoordinator,
-                        showNotification = { message -> showNotification(message) }
-                    )
-                }
-
-                item {
-                    AdvancedSettingsSection(
-                        config = config,
-                        configManager = configManager,
-                        saveCoordinator = saveCoordinator,
-                        keyAvailabilityTester = keyAvailabilityTester,
-                        showNotification = { message -> showNotification(message) }
-                    )
-                }
-            }
-
             @Composable
             fun HermesAgentSettingsSection(
                 config: ModelConfigData,
@@ -919,6 +853,74 @@ fun ModelConfigScreen(
                     }
                 }
             }
+
+
+            selectedConfig.value?.let { config ->
+                item {
+                    ModelApiSettingsSection(
+                        config = config,
+                        configManager = configManager,
+                        saveCoordinator = saveCoordinator,
+                        showNotification = { message -> showNotification(message) },
+                        navigateToMnnModelDownload = navigateToMnnModelDownload
+                    )
+                }
+
+                item {
+                    HermesAgentSettingsSection(
+                        config = config,
+                        configManager = configManager,
+                        saveCoordinator = saveCoordinator,
+                        showNotification = { message -> showNotification(message) }
+                    )
+                }
+
+                item {
+                    ContextSummarySettingsSection(
+                        config = config,
+                        configManager = configManager,
+                        scope = scope,
+                        showNotification = { message -> showNotification(message) }
+                    )
+                }
+
+                item {
+                    ThinkingConfigurationsSection(
+                        config = config,
+                        configManager = configManager,
+                        saveCoordinator = saveCoordinator,
+                        showNotification = { message -> showNotification(message) }
+                    )
+                }
+
+                item {
+                    ModelParametersSection(
+                        config = config,
+                        configManager = configManager,
+                        showNotification = { message -> showNotification(message) }
+                    )
+                }
+
+                item {
+                    CustomHeadersSettingsSection(
+                        config = config,
+                        configManager = configManager,
+                        saveCoordinator = saveCoordinator,
+                        showNotification = { message -> showNotification(message) }
+                    )
+                }
+
+                item {
+                    AdvancedSettingsSection(
+                        config = config,
+                        configManager = configManager,
+                        saveCoordinator = saveCoordinator,
+                        keyAvailabilityTester = keyAvailabilityTester,
+                        showNotification = { message -> showNotification(message) }
+                    )
+                }
+            }
+
 
             if (showSaveSuccessMessage) {
                 item {

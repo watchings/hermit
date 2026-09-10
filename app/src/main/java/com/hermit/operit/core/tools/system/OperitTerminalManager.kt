@@ -12,7 +12,7 @@ import java.net.URL
 import java.io.IOException
 
 object OperitTerminalManager {
-    const val PACKAGE_NAME = "com.hermit.terminal"
+    const val PACKAGE_NAME = "com.ai.assistance.operit.terminal"
     private const val REPO_OWNER = "AAswordman"
     private const val REPO_NAME = "OperitTerminal"
     private const val TAG = "OperitTerminalManager"

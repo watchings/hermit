@@ -30,13 +30,13 @@ import com.hermit.ui.features.toolbox.screens.ffmpegtoolbox.FFmpegToolboxScreen
 import com.hermit.ui.features.toolbox.screens.filemanager.FileManagerScreen
 import com.hermit.ui.features.toolbox.screens.logcat.LogcatScreen
 import com.hermit.ui.features.toolbox.screens.shellexecutor.ShellExecutorScreen
-import com.hermit.terminal.main.TerminalScreen as TerminalViewScreen
+import com.ai.assistance.operit.terminal.main.TerminalScreen as TerminalViewScreen
 // import com.hermit.ui.features.toolbox.screens.terminalconfig.TerminalAutoConfigScreen
 import com.hermit.ui.features.toolbox.screens.uidebugger.UIDebuggerScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import com.hermit.terminal.TerminalManager
-import com.hermit.terminal.rememberTerminalEnv
+import com.ai.assistance.operit.terminal.TerminalManager
+import com.ai.assistance.operit.terminal.rememberTerminalEnv
 import com.hermit.ui.main.LocalAppNavigationModel
 import com.hermit.ui.main.navigation.NavigationEntrySpec
 import com.hermit.ui.main.navigation.NavigationSurface
