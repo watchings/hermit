@@ -231,7 +231,15 @@ jobs:
         with:
           name: hermit-android-${{ github.run_number }}
           path: |
-            app/build/outputs/apk/**/*.apk
             app/build/outputs/bundle/**/*.aab
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload APK artifact
+        if: success()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: hermit-apk-${{ github.run_number }}
+          path: app/build/outputs/apk/**/*.apk
           if-no-files-found: error
           retention-days: 14
