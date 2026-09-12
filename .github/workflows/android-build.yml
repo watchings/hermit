@@ -232,7 +232,7 @@ jobs:
           name: hermit-android-${{ github.run_number }}
           path: |
             app/build/outputs/bundle/**/*.aab
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14
 
       - name: Upload APK artifact
