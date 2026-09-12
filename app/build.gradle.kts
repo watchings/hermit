@@ -556,10 +556,6 @@ tasks.matching { it.name == "assembleRelease" }.configureEach {
     finalizedBy(signRotatedReleaseApk)
 }
 
-tasks.matching { it.name == "assembleNightly" }.configureEach {
-    finalizedBy(signRotatedNightlyApk)
-}
-
 tasks.named("preBuild") {
     dependsOn(syncMainAssets)
     dependsOn(verifyExternallyBuiltNativeLibraries)
